@@ -1,0 +1,144 @@
+# config.example.yml — setup for the custom-budget patch.
+#
+# Copy this file to config.yml and fill in YOUR OWN figures and account
+# names. config.yml is YOUR real config: it is gitignored and never
+# committed. Everything in this file is a clearly fake placeholder — no
+# real balances, names, or hostnames anywhere.
+#
+# How it works: build-patch.js reads config.yml (or this file, for the
+# demo) and writes actual-budget-tweaks.js from
+# actual-budget-tweaks.js.template. install-tweaks.sh runs that build
+# step, then installs the generated patch. See README.md.
+#
+# Reconciliation (build-patch.js validates all of these and refuses to
+# build if any fails):
+#   - every month: income - spending = saved
+#   - every quarter: saved = the sum of its months' saved
+#   - year_to_date = the sum of all months' saved
+#   - net_worth = retirement + brokerage + net spendable + home equity + other
+#     where net spendable = (cash accounts + cash on hand) - cards owed
+#     and home equity = home value - mortgage owed
+#   - current_month.spent = the spending of the month named
+#     current_month.name (that month must be in the months list)
+
+# --- Install settings (placeholders) ---
+# Used by install-tweaks.sh when BUILD_DIR / SERVER_URL are not set in the
+# environment. Fill in your own Actual web build directory and server URL.
+install:
+  build_dir: /path/to/actual-app/web/build
+  server_url: https://example.com:5006
+
+# --- Home ---
+home:
+  value: 1200000         # home value (demo figure)
+  mortgage_owed: 850000  # principal owed, as a positive amount (demo figure)
+  down_payment: 400000   # down payment (demo figure). The placeholder
+                         # account is NOT counted alongside the home value.
+  may1_liquid: 480000    # liquid-cash baseline for the "back to May?" line
+
+# --- Net worth (validated) ---
+# Must equal retirement + brokerage + net spendable + home equity + other.
+net_worth: 908350
+
+# --- Accounts: fallback balances (used when the sidebar can't be read) ---
+# Generic names — rename the matchers in account_names to your own accounts.
+accounts:
+  retirement_a: 180000
+  retirement_b: 95000
+  brokerage_a: 75000
+  brokerage_b: 40000
+  brokerage_c: 5000
+  cash_a: 110000
+  cash_b: 12000
+  cash_c: 11000
+  cash_d: 2000
+  cash_on_hand: 500
+  cards_owed: 4000
+  other_a: 25000
+  other_b: 5000
+  other_c: 1500
+  other_d: 250
+  other_e: 100
+
+# --- Account-name matchers (lowercase substrings) ---
+# The patch matches sidebar account names by lowercase substring. Rename
+# these to your own account names. Every key below must be present.
+account_names:
+  retirement_a: "retirement account a"
+  retirement_b: "retirement account b"
+  brokerage_a: "brokerage account a"
+  brokerage_b: "brokerage account b"
+  brokerage_c: "brokerage account c"
+  cash_a: "cash account a"
+  cash_b: "cash account b"
+  cash_c: "cash account c"
+  cash_d: "cash account d"
+  cash_on_hand: "cash on hand"
+  card_a: "card a"
+  card_b: "card b"
+  card_c: "card c"
+  card_d: "card d"
+  card_e: "card e"
+  card_f: "card f"
+  card_g: "card g"
+  card_h: "card h"
+  mortgage: "mortgage"
+  house_down_payment: "house down payment"
+  other_a: "other account a"
+  other_b: "other account b"
+  other_c: "other account c"
+  other_d: "other account d"
+  other_e: "other account e"
+
+# --- Current month (the Budget page's month) ---
+current_month:
+  name: November
+  spent: 5000
+  budget: 7500
+
+# --- Monthly income / spending (demo months May-Nov) ---
+months:
+  - name: May
+    income: 12000
+    spending: 28000
+    saved: -16000
+  - name: Jun
+    income: 12000
+    spending: 8000
+    saved: 4000
+  - name: Jul
+    income: 12000
+    spending: 10000
+    saved: 2000
+  - name: Aug
+    income: 12000
+    spending: 14000
+    saved: -2000
+  - name: Sep
+    income: 12000
+    spending: 15000
+    saved: -3000
+  - name: Oct
+    income: 12000
+    spending: 13000
+    saved: -1000
+  - name: Nov
+    income: 12000
+    spending: 5000
+    saved: 7000
+
+# --- Savings goal ---
+goals:
+  quarterly_target: 10000
+  annual_target: 40000
+  quarters:
+    - label: "Q2 (May–Jun)"
+      months: [May, Jun]
+      saved: -12000
+    - label: "Q3 (Jul–Sep)"
+      months: [Jul, Aug, Sep]
+      saved: -3000
+    - label: "Q4 (Oct–Nov, Dec pending)"
+      months: [Oct, Nov]
+      saved: 6000
+  year_to_date: -9000

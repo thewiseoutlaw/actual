@@ -1,0 +1,10 @@
+# Your real config — never commit it. Copy config.example.yml to
+# config.yml and fill in your own figures; the example stays committed
+# as the template.
+config.yml
+
+# The patch is a build artifact, generated from
+# actual-budget-tweaks.js.template + config.yml by build-patch.js.
+# It is NOT committed: the template + config are the source of truth.
+# CI and install-tweaks.sh build it on the fly.
+actual-budget-tweaks.js
